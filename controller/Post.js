@@ -61,11 +61,9 @@ export const registerLogic = async (req, res) => {
       expiresIn: "2h",
     });
 
-    //save user token
-    user.token = token;
 
     //user
-    return res.status(201).json({token});
+    return res.status(201).json({ token });
   } catch (error) {
     console.log(error.message);
     res.send("<h1>404</h1>");
@@ -86,20 +84,18 @@ export const loginLogic = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).send("User not found, try registering");
 
-    if (await bcrypt.compare(password, user.password)) {
-      //create token
-      const token = jwt.sign({ user_id: user._id, email }, TOKEN_KEY, {
-        expiresIn: "2h",
-      });
+    //password check
+    if (!(await bcrypt.compare(password, user.password)))
+      return res.status(400).send("Invalid Credentials");
 
-      //save user token
-      user.token = token; //TODO: remove this implementation later
+    //create token
+    const token = jwt.sign({ user_id: user._id, email }, TOKEN_KEY, {
+      expiresIn: "2h",
+    });
 
-      //user
-      return res.status(200).json({ token });
-    }
-
-    return res.status(400).send("Invalid Credentials");
+    //save user token
+    //user
+    return res.status(200).json({ token });
   } catch (error) {
     console.log(error);
     return res.status(500).json({

@@ -25,7 +25,7 @@ const CONNECTION_url = 'mongodb+srv://guddu:gudduthebloger@cluster0.cxfiw.mongod
 
 //port
 const PORT = 8000  || process.env.PORT 
-
+const date = new Date();
 //connecting to dataBase and also connecting to server or port
 Mongoose.connect(CONNECTION_url)
     .then(()=>{
@@ -41,7 +41,7 @@ Mongoose.connect(CONNECTION_url)
 
 //basic routes
 app.get('/',(req,res)=>{
-    res.send('<h1>Working....</h1>')
+    res.send(`<h1>Working since ${date}</h1>`)
     console.log('hit on home')
 })
 
